@@ -1,0 +1,36 @@
+#top {
+    /*margin-right: 15px;*/
+}
+
+
+div {
+    font-size: 6vmin;
+    text-align: center;
+}
+
+p {
+    font-size: 3vmin;
+    text-align:center;
+}
+
+p, div[id*=pomo], div[id*=break] {
+    height: 10vh;
+    margin:0;
+}
+
+#time {
+    height: 73vh;
+    font-size: 12vmin;
+}
+
+div {
+    border: thin black solid;
+}
+
+#break div {
+    background-color: red;
+}
+
+#pomo div {
+    background-color: yellow;
+}

@@ -1,31 +1,4 @@
-// '{0}{1}'.lp_format('asdf', 1 + 2);
-if (!String.prototype.format) {
-  String.prototype.lp_format = function() {
-    var args = arguments;
-    return this.replace(/{(\d+)}/g, function(match, number) {
-      return typeof args[number] != 'undefined'
-        ? args[number]
-        : match
-      ;
-    });
-  };
-}
-
-function l (message) {
-  console.log(message);
-}
-
-function zeroFill( number, width )
-{
-  width -= number.toString().length;
-  if ( width > 0 )
-  {
-    return new Array( width + (/\./.test( number ) ? 2 : 1) ).join( '0' ) + number;
-  }
-  return number + ""; // always return a string
-}
-
-var app = angular.module('myApp', []);
+var app = angular.module('myApp', ['ngMaterial']);
 app.controller('MainController', ['$scope', function($scope) {
     
     $scope.breaklengthString = "05";
@@ -239,3 +212,30 @@ app.controller('MainController', ['$scope', function($scope) {
                  }
     }
 }]);
+
+// '{0}{1}'.lp_format('asdf', 1 + 2);
+if (!String.prototype.format) {
+  String.prototype.lp_format = function() {
+    var args = arguments;
+    return this.replace(/{(\d+)}/g, function(match, number) {
+      return typeof args[number] != 'undefined'
+        ? args[number]
+        : match
+      ;
+    });
+  };
+}
+
+function l (message) {
+  console.log(message);
+}
+
+function zeroFill( number, width )
+{
+  width -= number.toString().length;
+  if ( width > 0 )
+  {
+    return new Array( width + (/\./.test( number ) ? 2 : 1) ).join( '0' ) + number;
+  }
+  return number + ""; // always return a string
+}

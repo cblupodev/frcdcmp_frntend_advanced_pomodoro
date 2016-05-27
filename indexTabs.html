@@ -34,7 +34,8 @@
             </md-content>
         </md-tab>
         <md-tab label='settings'>
-            <md-content>
+            <md-content layout-padding>
+                <p>changes to settings take effect immediatley</p>
                 <div flex-offset-gt-xs='30' flex-gt-xs='40'>
                     <md-list layout-margin layout-padding>
                         <md-list-item layout='column' layout-align='start stretch' ng-repeat='e in [{ label : "pomodoro length"}, { label : "short break length"}, { label : "long break length"} ]'>
@@ -50,7 +51,7 @@
                         <md-list-item md-no-ink>
                             <md-checkbox md-no-ink>
                                 <md-subheader>continuous</md-subheader>
-                                <small>immediately begin session</small>
+                                <small>immediately begin nextsession</small>
                             </md-checkbox>
                         </md-list-item>
                     </md-list>

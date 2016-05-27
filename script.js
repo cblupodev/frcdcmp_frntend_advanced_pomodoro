@@ -157,8 +157,8 @@ app.controller('MainController', ['$scope', function($scope) {
                 break;
         }
         $scope.$apply();
-        l("time {0}   state {1}   pomoString {2}   breakString {3}   pomolength {4}   breaklength {5}".lp_format
-        ($scope.time, $scope.state, $scope.pomolengthString, $scope.breaklengthString, $scope.pomolength, $scope.breaklength))  ;
+        // l("time {0}   state {1}   pomoString {2}   breakString {3}   pomolength {4}   breaklength {5}".lp_format
+        // ($scope.time, $scope.state, $scope.pomolengthString, $scope.breaklengthString, $scope.pomolength, $scope.breaklength))  ;
         var ds = JSON.stringify({
             time: $scope.time,
             state: $scope.state,

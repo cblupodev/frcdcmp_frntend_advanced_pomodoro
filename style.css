@@ -1,7 +1,17 @@
-body, html, md-tabs, md-tab, md-content {
-    height: 100%;
+body,
+html,
+md-tabs,
+md-tab,
+md-content,
+md-tab-content > div {
+    height: 100% !important;
 }
 
-md-subheader {
-    background-color:defa !important;
+md-checkbox {
+    width: 120% !important;
+    left: -4% !important;
+}
+
+.md-subheader {
+    background-color:transparent !important;
 }

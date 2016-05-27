@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en" ng-app='myApp' ng-controller='MainController'>
+
+<head>
+    <meta charset="utf-8">
+    <meta name='viewport' content='width=device-width, minimum-scale=1.0, maximum-scale=1.0, initial-scale=1.0' user-scalable='no'>
+    <title>Title of the page</title>
+    <!-- Angular Material style sheet -->
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc2/angular-material.min.css">
+    <link href="style.css" media="screen" rel='stylesheet'>
+</head>
+
+<!--http://codepen.io/cblupodev/pen/ZGMyWg-->
+<!--https://www.freecodecamp.com/challenges/build-a-pomodoro-clock-->
+
+
+<body ng-app='myApp' ng-controller='MainController' ng-view ng-cloak>
+
+    <md-tabs>
+        <md-tab label='pomodoro'>
+            <md-content layout='column' flex layout-align='space-between stretch'>
+                <md-button flex='85'>clock here</md-button>
+                <md-progress-linear></md-progress-linear>
+                <div layout='row'>
+                    <md-button flex>- minute</md-button>
+                    <md-button flex>+ minute</md-button>
+                </div>
+                <md-button>
+                    stop
+                </md-button>
+                <md-button>
+                    skip
+                </md-button>
+            </md-content>
+        </md-tab>
+        <md-tab label='settings'>
+            <md-content>
+                <div flex-offset-gt-xs='30' flex-gt-xs='40'>
+                    <md-list layout-margin layout-padding>
+                        <md-list-item layout='column' layout-align='start stretch' ng-repeat='e in [{ label : "pomodoro length"}, { label : "short break length"}, { label : "long break length"} ]'>
+                            <div>
+                                <md-subheader>{{e.label}}</md-subheader>
+                            </div>
+                            <div layout='row' layout-align='center center'>
+                                <div flex>0</div>
+                                <md-button class='md-raised' flex-offset='30'>-</md-button>
+                                <md-button class='md-raised'>+</md-button>
+                            </div>
+                        </md-list-item>
+                        <md-list-item md-no-ink>
+                            <md-checkbox md-no-ink>
+                                <md-subheader>continuous</md-subheader>
+                                <small>immediately begin session</small>
+                            </md-checkbox>
+                        </md-list-item>
+                    </md-list>
+                </div>
+            </md-content>
+        </md-tab>
+    </md-tabs>
+
+    <!-- Angular Material requires Angular.js Libraries -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-animate.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-aria.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-messages.min.js"></script>
+    <!-- Angular Material Library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc2/angular-material.min.js"></script>
+    <script src='script.js'></script>
+</body>
+
+</html>

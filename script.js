@@ -8,30 +8,30 @@ app.controller('MainController', ['$scope', function($scope) {
         longBreakLength: 15,
         continuous: false
     }
-    
+
     // preferences made sticky towards the user. Like what tab they last clicked on
     $scope.settingsImplicit = {
-        selectedTab : 0
+        selectedTab: 0
     }
-    
+
     // the state machine object
     $scope.Pomodoro = function() {
         var currentState = new Start(this);
-        
+
         this.change = function(state) {
             currentState = state;
             currentState.go();
         }
-        
-        this.start = function () {
+
+        this.start = function() {
             currentState.go();
         }
     }
-    
+
     var Start = function(pomodoro) {
         this.pomodoro = pomodoro;
-        
-        this.go  = function() {
+
+        this.go = function() {
             l("start go");
             pomodoro.change()
         }

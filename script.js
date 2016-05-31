@@ -1,35 +1,52 @@
-var app = angular.module('myApp', ['ngMaterial']);
+if (!localStorage.getItem('pomo')) {
+    localStorage.setItem('pomo', {}); // initialize the storage
+}
+
+var app = angular.module('myApp', ['ngMaterial']).
+run(function($rootScope, $log) {
+    $rootScope.$log = $log;
+});
 app.controller('MainController', ['$scope', '$interval', 'fsm', function($scope, $interval, fsm) {
 
     var S = $scope;
-    S.fsm = fsm.getFSM(S);
+    S.fsm = fsm.getFSM($scope);
     S.time = 0; // current timer value in milliseconds
     S.timeDisplay = null; // string to display
     S.pomoCount = 0; // total pomodoros completed
     S.running = false; // flag if the timer should be running
     S.interval = null; // angular interval handler
-    
+
+    $scope.$watch('time', function() {
+        S.time = Math.max(S.time, 0);
+        S.timeDisplay = formatTimeDisplay(S.time);
+        S.progressValue = (S.endTime - S.time) / S.endTime * 100 || 0;
+    });
+
 
     // settings selected by the users
     S.settingsExplicit = {
         pomoLength: 10,
         shortBreakLength: 2,
         longBreakLength: 15,
-        continuous: false
+        continuous: true
     }
 
     // preferences made sticky towards the user. Like what tab they last clicked on
     S.settingsImplicit = {
-        selectedTab: 0
+        selectedTab: 0,
+        lastState: '',
+        lastTime: 0
     }
 
     S.time = S.settingsExplicit.pomoLength.minutesToMilliSeconds();
+    S.endTime = S.time;
+    l(S.endTime);
     S.timeDisplay = formatTimeDisplay(S.time);
 
     // the state machine object
     S.toggleTimer = function() {
         S.running = !S.running;
-        
+
         if (S.running) {
             l('running');
             // start timer if it should be running
@@ -39,7 +56,6 @@ app.controller('MainController', ['$scope', '$interval', 'fsm', function($scope,
                 }
                 else {
                     S.time -= 1000;
-                    S.timeDisplay = formatTimeDisplay(S.time);
                 }
             }, 10);
         } else {
@@ -48,7 +64,7 @@ app.controller('MainController', ['$scope', '$interval', 'fsm', function($scope,
             $interval.cancel(S.interval);
         }
     }
-    
+
 }]);
 
 function formatTimeDisplay(seconds) {
@@ -58,8 +74,8 @@ function formatTimeDisplay(seconds) {
 }
 
 app.factory('fsm' ,function() {
-
     // https://github.com/jakesgordon/javascript-state-machine
+
     var service = {};
     service.getFSM = function(S) {
         var fsm = StateMachine.create({
@@ -81,34 +97,56 @@ app.factory('fsm' ,function() {
                   if (!S.settingsExplicit.continuous === true) {
                       S.toggleTimer();
                   }
-                  // set the break time
-                  // don't forget the long break
-                  if (to === 'break') {
-                      S.pomoCount++;
-                      if (S.pomoCount === 4) // four is the default pomo completed until long break 
-                      {
-                          S.time = S.settingsExplicit.longBreakLength.minutesToMilliSeconds();
-                      }
-                      else {
-                          S.time = S.settingsExplicit.shortBreakLength.minutesToMilliSeconds();
-                      }
-                      S.timeDisplay = formatTimeDisplay(S.time);
+
+                  setUpTimes(to);
+              },
+              onskip: function(event, from, to) {
+                  setUpTimes(to);
+              },
+              onstop: function(event, from, to) {
+                  if (S.running) {
+                      S.toggleTimer();
                   }
-                  else if (to === 'pomo') {
-                      // set the pomo time
-                      S.pomoCount = 0;
+                  if (S.pomoCount === 4) {
+                      S.time = S.settingsExplicit.longBreakLength.minutesToMilliSeconds();
+                  } else if (to === 'break') {
+                      S.time = S.settingsExplicit.shortBreakLength.minutesToMilliSeconds();
+                  } else if (to === 'pomo') {
                       S.time = S.settingsExplicit.pomoLength.minutesToMilliSeconds();
-                      S.timeDisplay = formatTimeDisplay(S.time);
                   }
               }
           }
           });
+
+        function setUpTimes(to) {
+          // set the break time
+          // don't forget the long break
+          S.endTime = null;
+          if (to === 'break') {
+              S.pomoCount++;
+              if (S.pomoCount === 4) // four is the default pomo completed until long break
+              {
+                  S.endTime = S.settingsExplicit.longBreakLength.minutesToMilliSeconds();
+                  S.pomoCount = 0;
+              }
+              else {
+                  S.endTime = S.settingsExplicit.shortBreakLength.minutesToMilliSeconds();
+              }
+          }
+          else if (to === 'pomo') {
+              // set the pomo time
+              S.endTime = S.settingsExplicit.pomoLength.minutesToMilliSeconds();
+          }
+
+          // tell the progress bar what's 100%
+          S.time = S.endTime;
+        }
       return fsm;
     }
   return service;
 });
-  
- 
+
+
 
 // '{0}{1}'.lp_format('asdf', 1 + 2);
 if (!String.prototype.format) {

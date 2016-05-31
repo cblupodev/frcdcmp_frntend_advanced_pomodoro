@@ -17,31 +17,22 @@
 <body ng-app='myApp' ng-controller='MainController' ng-view ng-cloak>
 
     <md-tabs>
-        <md-tab label='pomodoro'>
-            <md-content layout='column' flex layout-align='space-between stretch'>
-                <md-button flex='85' ng-click='toggleTimer()'>{{timeDisplay}}</md-button>
-                <md-progress-linear></md-progress-linear>
-                <div layout='row'>
-                    <md-button flex>- minute</md-button>
-                    <md-button flex>+ minute</md-button>
-                </div>
-                <md-button ng-click='fsm.stop()'>stop</md-button>
-                <md-button ng-click='fsm.skip()'>skip</md-button>
-            </md-content>
-        </md-tab>
         <md-tab label='settings'>
             <md-content layout-padding>
                 <p>changes to settings take effect immediatley</p>
                 <div flex-offset-gt-xs='30' flex-gt-xs='40'>
                     <md-list layout-margin layout-padding>
                         <md-list-item layout='column' layout-align='start stretch' ng-repeat='e in [{ label : "pomodoro length"}, { label : "short break length"}, { label : "long break length"} ]'>
-                            <div>
-                                <md-subheader>{{e.label}}</md-subheader>
-                            </div>
+                            <!--<div>-->
+                            <!--    <md-subheader>{{e.label}}</md-subheader>-->
+                            <!--</div>-->
                             <div layout='row' layout-align='center center'>
-                                <div flex>0</div>
-                                <md-button class='md-raised' flex-offset='30'>-</md-button>
-                                <md-button class='md-raised'>+</md-button>
+                                <md-input-container>
+                                    <label>pomo</label>
+                                    <input aria-label='pomolength' required min='0' ng-model='settings.pomoLength' type='number'>
+                                </md-input-container>
+                                <!--<md-button class='md-raised' flex-offset='30'>-</md-button>-->
+                                <!--<md-button class='md-raised'>+</md-button>-->
                             </div>
                         </md-list-item>
                         <md-list-item md-no-ink>
@@ -52,6 +43,19 @@
                         </md-list-item>
                     </md-list>
                 </div>
+            </md-content>
+        </md-tab>
+        <md-tab label='pomodoro'>
+            <md-content layout='column' flex layout-align='space-between stretch' layout-margin layout-padding>
+                <md-button flex='85' ng-click='toggleTimer()'>{{timeDisplay}}</md-button>
+                <span>{{pomoCount}} / 4</span>
+                <md-progress-linear md-mode='determinate' value='{{progressValue}}'></md-progress-linear>
+                <div layout='row'>
+                    <md-button flex ng-click='time = time - 1000 * 60; endTime = time;'>- minute</md-button>
+                    <md-button flex ng-click='time = time + 1000 * 60; endTime = time;'>+ minute</md-button>
+                </div>
+                <md-button ng-click='fsm.stop()'>stop</md-button>
+                <md-button ng-click='fsm.skip()'>skip</md-button>
             </md-content>
         </md-tab>
     </md-tabs>

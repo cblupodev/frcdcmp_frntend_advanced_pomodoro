@@ -19,18 +19,14 @@
     <md-tabs>
         <md-tab label='pomodoro'>
             <md-content layout='column' flex layout-align='space-between stretch'>
-                <md-button flex='85'>clock here</md-button>
+                <md-button flex='85' ng-click='toggleTimer()'>{{timeDisplay}}</md-button>
                 <md-progress-linear></md-progress-linear>
                 <div layout='row'>
                     <md-button flex>- minute</md-button>
                     <md-button flex>+ minute</md-button>
                 </div>
-                <md-button>
-                    stop
-                </md-button>
-                <md-button>
-                    skip
-                </md-button>
+                <md-button ng-click='fsm.stop()'>stop</md-button>
+                <md-button ng-click='fsm.skip()'>skip</md-button>
             </md-content>
         </md-tab>
         <md-tab label='settings'>

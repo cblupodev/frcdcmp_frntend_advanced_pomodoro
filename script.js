@@ -25,7 +25,7 @@ app.controller('MainController', ['$scope', '$interval', 'fsm', function($scope,
 
     // settings selected by the users
     S.settingsExplicit = {
-        pomoLength: 10,
+        pomoLength: 25,
         shortBreakLength: 2,
         longBreakLength: 15,
         continuous: true

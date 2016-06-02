@@ -15,3 +15,7 @@ md-checkbox {
 .md-subheader {
     background-color: transparent !important;
 }
+
+md-content {
+    padding: 0px !important;
+}

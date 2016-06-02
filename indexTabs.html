@@ -18,10 +18,9 @@
 
     <md-tabs>
         <md-tab md-active='true' label='pomodoro'>
-            <md-tab-body>
-                <md-content layout='column' flex layout-align='space-between stretch' layout-margin>
-                    <md-button flex='85' ng-click='toggleTimer()'>{{timeDisplay}}</md-button>
-                    <span>{{pomoCount}} / 4</span>
+                <md-content layout='column' flex>
+                    <md-button flex ng-click='toggleTimer()'>{{timeDisplay}}</md-button>
+                    <span layout-margin >{{pomoCount}} / 4</span>
                     <md-progress-linear md-mode='determinate' value='{{progressValue}}'></md-progress-linear>
                     <div layout='row'>
                         <md-button flex ng-click='time = time - 1000 * 60; endTime = time;'>- minute</md-button>
@@ -34,7 +33,6 @@
         </md-tab>
         <md-tab label='settings'>
             <md-tab-body>
-                <p>changes to settings take effect immediatley</p>
                 <md-content flex-offset-gt-xs='30' flex-gt-xs='40'>
                     <md-list>
                         <md-list-item layout='column' layout-align='start stretch'>
@@ -62,8 +60,9 @@
                         </md-list-item>
                     </md-list>
                 </md-content>
-            </md-tab-body>   
-     </md-tab>
+            </md-tab-body>
+
+        </md-tab>
     </md-tabs>
 
     <!-- Angular Material requires Angular.js Libraries -->

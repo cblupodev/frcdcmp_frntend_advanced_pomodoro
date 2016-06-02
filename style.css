@@ -19,3 +19,7 @@ md-checkbox {
 md-content {
     padding: 0px !important;
 }
+
+#links {
+    font-size: .7rem;
+}

@@ -11,12 +11,6 @@
 </head>
 
 <body ng-app='myApp' ng-controller='MainController' ng-view ng-cloak>
-    
-    <div id='links'>
-            codepen project <a href='http://codepen.io/cblupodev/pen/ZGMyWg' target='_blank'> [buildapomodoroclock - codepen.io]</a>
-            freecodeamp assignment <a href='https://www.freecodecamp.com/challenges/use-the-twitchtv-json-api' target='_blank'> [Build a Pomodoro Clock - freecodeamp.com]</a>
-    </div>
-
     <md-tabs>
         <md-tab label='pomodoro'>
             <md-content layout='column' flex>
@@ -40,19 +34,19 @@
                     <md-list-item layout='column' layout-align='start stretch'>
                         <md-input-container>
                             <label>pomodoro length</label>
-                            <input aria-label='pomolength' required min='0' ng-model='settings.pomoLength' type='number'>
+                            <input aria-label='pomolength' required min='1' max='99' ng-model='settings.pomoLength' type='number'>
                         </md-input-container>
                     </md-list-item>
                     <md-list-item layout='column' layout-align='start stretch'>
                         <md-input-container>
                             <label>short break length</label>
-                            <input aria-label='shortlength' required min='0' ng-model='settings.shortBreakLength' type='number'>
+                            <input aria-label='shortlength' required min='1' max='99' ng-model='settings.shortBreakLength' type='number'>
                         </md-input-container>
                     </md-list-item>
                     <md-list-item layout='column' layout-align='start stretch'>
                         <md-input-container>
                             <label>long break length</label>
-                            <input aria-label='longlength' required min='0' ng-model='settings.longBreakLength' type='number'>
+                            <input aria-label='longlength' required min='1' max='99' ng-model='settings.longBreakLength' type='number'>
                         </md-input-container>
                     </md-list-item>
                     <md-list-item md-no-ink>
@@ -64,6 +58,10 @@
             </md-content>
         </md-tab>
     </md-tabs>
+
+    <div id='links'>
+        codepen project <a href='http://codepen.io/cblupodev/pen/ZGMyWg' target='_blank'> [buildapomodoroclock - codepen.io]</a> freecodeamp assignment <a href='https://www.freecodecamp.com/challenges/build-a-pomodoro-clock' target='_blank'> [Build a Pomodoro Clock - freecodeamp.com]</a>
+    </div>
 
     <!-- Angular Material requires Angular.js Libraries -->
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>

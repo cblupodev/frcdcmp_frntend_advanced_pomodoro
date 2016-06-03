@@ -1,46 +1,45 @@
-// initialize local storage
-if (!localStorage.getItem('settings')) {
-    localStorage.setItem('settings', {}); // initialize the storage
-}
-
-var app = angular.module('myApp', ['ngMaterial']).
-run(function($rootScope, $log) {
-    $rootScope.$log = $log;
+var app = angular.module('myApp', ['ngMaterial'])
+.config(function($mdThemingProvider) {
+  $mdThemingProvider.theme('default')
+    .primaryPalette('red')
+    .accentPalette('grey')
+    .dark();
 });
 app.controller('MainController', ['$scope', '$interval', 'fsm', function($scope, $interval, fsm) {
-    var S = $scope;
+    var S = $scope; // shosrtcut to scope
 
-    // initialize variables from last use
-    // explicit settings
-    if (JSON.parse(localStorage.getItem('settings')) === '{}') {
-        // settings selected by the users
+    S.fsm = fsm.getFSM($scope); // the fsm service
+    S.time = 0; // current timer value in milliseconds
+    S.timeDisplay = null; // string to display to the user
+    S.pomoCount = 0; // total pomodoros completed in the current cycle
+    S.running = false; // flag if the timer should be running
+    S.interval = null; // angular interval handler
+    S.state = 'pomodoro session'; // string state displayed t othe user
+    S.endTime = 0; // the time at which the timer in the current fsm state should stop
+
+    // use the default settings the first time the app is loaded (nothing is in local storage)
+    var store = JSON.parse(localStorage.getItem('settings'));
+    if (store === null) {
+        // default settings
         S.settings = {
             pomoLength: 25,
-            shortBreakLength: 2,
+            shortBreakLength: 5,
             longBreakLength: 15,
             continuous: true
         }
     } else {
-        S.settings = JSON.parse(localStorage.getItem('settings'));
+        S.settings = store;
     }
 
-    S.fsm = fsm.getFSM($scope);
-    S.time = 0; // current timer value in milliseconds
-    S.timeDisplay = null; // string to display
-    S.pomoCount = 0; // total pomodoros completed
-    S.running = false; // flag if the timer should be running
-    S.interval = null; // angular interval handler
-    S.state = 'pomodoro session';
-
+    // update ui elements when the time changes
     $scope.$watch('time', function() {
         S.time = Math.max(S.time, 0);
         S.timeDisplay = formatTimeDisplay(S.time);
         S.progressValue = (S.endTime - S.time) / S.endTime * 100 || 0;
     });
 
+    // update local storage when settings change
     $scope.$watchCollection('settings', function(newSettings) {
-        if (!S.running) {
-        }
        localStorage.setItem('settings', JSON.stringify(newSettings));
     });
 
@@ -49,20 +48,22 @@ app.controller('MainController', ['$scope', '$interval', 'fsm', function($scope,
     S.endTime = S.time;
     S.timeDisplay = formatTimeDisplay(S.time);
 
-    // the state machine object
+    // start and stop the timer
     S.toggleTimer = function() {
-        S.running = !S.running;
+        S.running = !S.running; // toggle the timer
 
         if (S.running) {
             // start timer if it should be running
             S.interval = $interval(function() {
                 if (S.time === 0) {
+                    // session ended
                     S.fsm.sesend();
                 }
                 else {
+                    // subtract time by one second
                     S.time -= 1000;
                 }
-            }, 10);
+            }, 100);
         } else {
             // stop timer if it should't be running
             $interval.cancel(S.interval);
@@ -71,12 +72,14 @@ app.controller('MainController', ['$scope', '$interval', 'fsm', function($scope,
 
 }]);
 
+// format the millisecond time into '<minutes>  <seconds>' (zero fill of two)
 function formatTimeDisplay(seconds) {
     var minutes = Math.floor(seconds / 60000);
     var seconds = seconds / 1000 % 60;
     return zeroFill(minutes, 2) + "   " + zeroFill(seconds, 2);
 }
 
+// finite state machine for the app
 app.factory('fsm' ,function() {
     // https://github.com/jakesgordon/javascript-state-machine
 
@@ -112,8 +115,11 @@ app.factory('fsm' ,function() {
                       S.toggleTimer();
                   }
                   if (S.pomoCount === 4) {
+                      // in long break
                       S.time = S.settings.longBreakLength.minutesToMilliSeconds();
                   } else if (to === 'break') {
+
+                      // in short break
                       S.time = S.settings.shortBreakLength.minutesToMilliSeconds();
                   } else if (to === 'pomo') {
                       S.time = S.settings.pomoLength.minutesToMilliSeconds();
@@ -153,12 +159,7 @@ app.factory('fsm' ,function() {
   return service;
 });
 
-app.config(function($mdThemingProvider) {
-  $mdThemingProvider.theme('default')
-    .primaryPalette('red')
-    .accentPalette('grey')
-    .dark();
-});
+// HELPERS ↓
 
 // '{0}{1}'.lp_format('asdf', 1 + 2);
 if (!String.prototype.format) {

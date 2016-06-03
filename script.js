@@ -1,10 +1,11 @@
 var app = angular.module('myApp', ['ngMaterial'])
-.config(function($mdThemingProvider) {
-  $mdThemingProvider.theme('default')
-    .primaryPalette('red')
-    .accentPalette('grey')
-    .dark();
-});
+    .config(function($mdThemingProvider) {
+        $mdThemingProvider.theme('default')
+            .primaryPalette('red')
+            .accentPalette('grey')
+            .dark();
+    });
+
 app.controller('MainController', ['$scope', '$interval', 'fsm', function($scope, $interval, fsm) {
     var S = $scope; // shosrtcut to scope
 
@@ -27,7 +28,8 @@ app.controller('MainController', ['$scope', '$interval', 'fsm', function($scope,
             longBreakLength: 15,
             continuous: true
         }
-    } else {
+    }
+    else {
         S.settings = store;
     }
 
@@ -40,7 +42,7 @@ app.controller('MainController', ['$scope', '$interval', 'fsm', function($scope,
 
     // update local storage when settings change
     $scope.$watchCollection('settings', function(newSettings) {
-       localStorage.setItem('settings', JSON.stringify(newSettings));
+        localStorage.setItem('settings', JSON.stringify(newSettings));
     });
 
 
@@ -64,7 +66,8 @@ app.controller('MainController', ['$scope', '$interval', 'fsm', function($scope,
                     S.time -= 1000;
                 }
             }, 100);
-        } else {
+        }
+        else {
             // stop timer if it should't be running
             $interval.cancel(S.interval);
         }
@@ -104,7 +107,7 @@ app.factory('fsm' ,function() {
                   if (!S.settings.continuous === true) {
                       S.toggleTimer();
                   }
-
+          
                   setUpTimes(to);
               },
               onskip: function(event, from, to) {
@@ -117,11 +120,13 @@ app.factory('fsm' ,function() {
                   if (S.pomoCount === 4) {
                       // in long break
                       S.time = S.settings.longBreakLength.minutesToMilliSeconds();
-                  } else if (to === 'break') {
-
+                  }
+                  else if (to === 'break') {
+          
                       // in short break
                       S.time = S.settings.shortBreakLength.minutesToMilliSeconds();
-                  } else if (to === 'pomo') {
+                  }
+                  else if (to === 'pomo') {
                       S.time = S.settings.pomoLength.minutesToMilliSeconds();
                   }
               }
@@ -129,30 +134,30 @@ app.factory('fsm' ,function() {
           });
 
         function setUpTimes(to) {
-          // set the break time
-          // don't forget the long break
-          S.endTime = null;
-          if (to === 'break') {
-              S.pomoCount++;
-              if (S.pomoCount === 4) // four is the default pomo completed until long break
-              {
-                  S.state = 'long break'
-                  S.endTime = S.settings.longBreakLength.minutesToMilliSeconds();
-                  S.pomoCount = 0;
-              }
-              else {
-                  S.state = 'short break'
-                  S.endTime = S.settings.shortBreakLength.minutesToMilliSeconds();
-              }
-          }
-          else if (to === 'pomo') {
-              // set the pomo time
-              S.state = 'pomodoro session'
-              S.endTime = S.settings.pomoLength.minutesToMilliSeconds();
-          }
-
-          // tell the progress bar what's 100%
-          S.time = S.endTime;
+            // set the break time
+            // don't forget the long break
+            S.endTime = null;
+            if (to === 'break') {
+                S.pomoCount++;
+                if (S.pomoCount === 4) // four is the default pomo completed until long break
+                {
+                    S.state = 'long break'
+                    S.endTime = S.settings.longBreakLength.minutesToMilliSeconds();
+                    S.pomoCount = 0;
+                }
+                else {
+                    S.state = 'short break'
+                    S.endTime = S.settings.shortBreakLength.minutesToMilliSeconds();
+                }
+            }
+            else if (to === 'pomo') {
+                // set the pomo time
+                S.state = 'pomodoro session'
+                S.endTime = S.settings.pomoLength.minutesToMilliSeconds();
+            }
+        
+            // tell the progress bar what's 100%
+            S.time = S.endTime;
         }
       return fsm;
     }
